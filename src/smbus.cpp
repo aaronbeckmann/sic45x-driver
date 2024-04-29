@@ -6,10 +6,10 @@ Smbus::Smbus(uint8_t address) : Smbus(address, Wire) {}
 
 Smbus::Smbus(uint8_t address, TwoWire& wire) : address_(address), wire_(wire) {}
 
-Smbus::void setWire(TwoWire& wire){
+void Smbus::setWire(TwoWire& wire){
   this->wire_ = wire;
 }
-Smbus::void setAddress(uint8_t address){
+void Smbus::setAddress(uint8_t address){
   this->address_ = address;
 }
 
