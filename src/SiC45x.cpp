@@ -3,8 +3,6 @@
 // regenerate this file.
 
 #include <Arduino.h>
-
-//#include "esphome/core/log.h"  
 #include "SiC45x.h"
 
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
@@ -17,29 +15,27 @@ uint8_t SiC45x::getOperation() {
   return smbus_.readByte(SIC45X_OPERATION_CMD);
 }
 
-void SiC45x::printOperation() {
+String SiC45x::printOperation() {
   uint8_t value = getOperation();
-  Serial.println(F("Operation: "));
-  Serial.print(F("  OnOff: "));
-  printIfEq(value, 0b1 << 7, SIC45X_OPERATION_ON_OFF_DISABLED, F("DISABLED"));
-  printIfEq(value, 0b1 << 7, SIC45X_OPERATION_ON_OFF_ENABLED, F("ENABLED"));
-  Serial.println();
-  Serial.print(F("  OffB: "));
-  printIfEq(value, 0b1 << 6, SIC45X_OPERATION_OFF_B_IMMEDIATE, F("IMMEDIATE"));
-  printIfEq(value, 0b1 << 6, SIC45X_OPERATION_OFF_B_DELAYED, F("DELAYED"));
-  Serial.println();
-  Serial.print(F("  Margin: "));
-  printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_COMMAND, F("COMMAND"));
-  printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_LOW, F("LOW"));
-  printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_HIGH, F("HIGH"));
-  printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_NOT_SUPPORTED, F("NOT_SUPPORTED"));
-  Serial.println();
-  Serial.print(F("  Mrgnflt: "));
-  printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_NOT_SUPPORTED_1, F("NOT_SUPPORTED_1"));
-  printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_IGNORE, F("IGNORE"));
-  printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_FOLLOW, F("FOLLOW"));
-  printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_NOT_SUPPORTED_2, F("NOT_SUPPORTED_2"));
-  Serial.println();
+  String ret = "Operation:\nOnOff: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_OPERATION_ON_OFF_DISABLED, F("DISABLED"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_OPERATION_ON_OFF_ENABLED, F("ENABLED"));
+  ret += "\nOffB: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_OPERATION_OFF_B_IMMEDIATE, F("IMMEDIATE"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_OPERATION_OFF_B_DELAYED, F("DELAYED"));
+  ret += "\nMargin: ";
+  ret += printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_COMMAND, F("COMMAND"));
+  ret += printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_LOW, F("LOW"));
+  ret += printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_HIGH, F("HIGH"));
+  ret += printIfEq(value, 0b11 << 4, SIC45X_OPERATION_MARGIN_NOT_SUPPORTED, F("NOT_SUPPORTED"));
+  ret += "\nMrgnflt: ";
+  ret += printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_NOT_SUPPORTED_1, F("NOT_SUPPORTED_1"));
+  ret += printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_IGNORE, F("IGNORE"));
+  ret += printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_FOLLOW, F("FOLLOW"));
+  ret += printIfEq(value, 0b11 << 2, SIC45X_OPERATION_MRGNFLT_NOT_SUPPORTED_2, F("NOT_SUPPORTED_2"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setOperation(uint8_t value) {
@@ -50,29 +46,26 @@ uint8_t SiC45x::getOnOffConfiguration() {
   return smbus_.readByte(SIC45X_ON_OFF_CONFIGURATION_CMD);
 }
 
-void SiC45x::printOnOffConfiguration() {
+String SiC45x::printOnOffConfiguration() {
   uint8_t value = getOnOffConfiguration();
-  Serial.println(F("OnOffConfiguration: "));
-  Serial.print(F("  Pu: "));
-  printIfEq(value, 0b1 << 4, SIC45X_ON_OFF_CONFIGURATION_PU_POWER, F("POWER"));
-  printIfEq(value, 0b1 << 4, SIC45X_ON_OFF_CONFIGURATION_PU_COMMAND, F("COMMAND"));
-  Serial.println();
-  Serial.print(F("  Cmd: "));
-  printIfEq(value, 0b1 << 3, SIC45X_ON_OFF_CONFIGURATION_CMD_IGNORE, F("IGNORE"));
-  printIfEq(value, 0b1 << 3, SIC45X_ON_OFF_CONFIGURATION_CMD_RESPOND, F("RESPOND"));
-  Serial.println();
-  Serial.print(F("  En: "));
-  printIfEq(value, 0b1 << 2, SIC45X_ON_OFF_CONFIGURATION_EN_IGNORE, F("IGNORE"));
-  printIfEq(value, 0b1 << 2, SIC45X_ON_OFF_CONFIGURATION_EN_REQUIRE, F("REQUIRE"));
-  Serial.println();
-  Serial.print(F("  Enpol: "));
-  printIfEq(value, 0b1 << 1, SIC45X_ON_OFF_CONFIGURATION_ENPOL_LOW, F("LOW"));
-  printIfEq(value, 0b1 << 1, SIC45X_ON_OFF_CONFIGURATION_ENPOL_HIGH, F("HIGH"));
-  Serial.println();
-  Serial.print(F("  Offb1: "));
-  printIfEq(value, 0b1 << 0, SIC45X_ON_OFF_CONFIGURATION_OFFB1_DELAYED, F("DELAYED"));
-  printIfEq(value, 0b1 << 0, SIC45X_ON_OFF_CONFIGURATION_OFFB1_IMMEDIATE, F("IMMEDIATE"));
-  Serial.println();
+  String ret = "OnOffConfiguration:\nPu: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_ON_OFF_CONFIGURATION_PU_POWER, F("POWER"));
+  ret += printIfEq(value, 0b1 << 4, SIC45X_ON_OFF_CONFIGURATION_PU_COMMAND, F("COMMAND"));
+  ret += "\nCmd: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_ON_OFF_CONFIGURATION_CMD_IGNORE, F("IGNORE"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_ON_OFF_CONFIGURATION_CMD_RESPOND, F("RESPOND"));
+  ret += "\nEn: ";
+  ret += printIfEq(value, 0b1 << 2, SIC45X_ON_OFF_CONFIGURATION_EN_IGNORE, F("IGNORE"));
+  ret += printIfEq(value, 0b1 << 2, SIC45X_ON_OFF_CONFIGURATION_EN_REQUIRE, F("REQUIRE"));
+  ret += "\nEnpol: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_ON_OFF_CONFIGURATION_ENPOL_LOW, F("LOW"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_ON_OFF_CONFIGURATION_ENPOL_HIGH, F("HIGH"));
+  ret += "\nOffb1: ";
+  ret += printIfEq(value, 0b1 << 0, SIC45X_ON_OFF_CONFIGURATION_OFFB1_DELAYED, F("DELAYED"));
+  ret += printIfEq(value, 0b1 << 0, SIC45X_ON_OFF_CONFIGURATION_OFFB1_IMMEDIATE, F("IMMEDIATE"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setOnOffConfiguration(uint8_t value) {
@@ -93,24 +86,21 @@ uint8_t SiC45x::getCapability() {
   return smbus_.readByte(SIC45X_CAPABILITY_CMD);
 }
 
-void SiC45x::printCapability() {
+String SiC45x::printCapability() {
   uint8_t value = getCapability();
-  Serial.println(F("Capability: "));
-  Serial.print(F("  Pec: "));
-  printIfEq(value, 0b1 << 7, SIC45X_CAPABILITY_PEC_SUPPORTED, F("SUPPORTED"));
-  Serial.println();
-  Serial.print(F("  Spd: "));
-  printIfEq(value, 0b11 << 5, SIC45X_CAPABILITY_SPD_M1, F("M1"));
-  Serial.println();
-  Serial.print(F("  Alrt: "));
-  printIfEq(value, 0b1 << 4, SIC45X_CAPABILITY_ALRT_SUPPORTED, F("SUPPORTED"));
-  Serial.println();
-  Serial.print(F("  Nfmt: "));
-  printIfEq(value, 0b1 << 3, SIC45X_CAPABILITY_NFMT_L11_L16_DIRECT, F("L11_L16_DIRECT"));
-  Serial.println();
-  Serial.print(F("  Avs: "));
-  printIfEq(value, 0b1 << 3, SIC45X_CAPABILITY_AVS_NOT_SUPPORTED, F("NOT_SUPPORTED"));
-  Serial.println();
+  String ret = "Capability:\nPec: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_CAPABILITY_PEC_SUPPORTED, F("SUPPORTED"));
+  ret += "\nSpd: ";
+  ret += printIfEq(value, 0b11 << 5, SIC45X_CAPABILITY_SPD_M1, F("M1"));
+  ret += "\nAlrt: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_CAPABILITY_ALRT_SUPPORTED, F("SUPPORTED"));
+  ret += "\nNfmt: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_CAPABILITY_NFMT_L11_L16_DIRECT, F("L11_L16_DIRECT"));
+  ret += "\nAvs: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_CAPABILITY_AVS_NOT_SUPPORTED, F("NOT_SUPPORTED"));
+  ret += "\n";
+
+  return ret;
 }
 
 float SiC45x::getVoutMode() {
@@ -193,15 +183,16 @@ uint16_t SiC45x::getInterleave() {
   return smbus_.readWord(SIC45X_INTERLEAVE_CMD);
 }
 
-void SiC45x::printInterleave() {
+String SiC45x::printInterleave() {
   uint16_t value = getInterleave();
-  Serial.println(F("Interleave: "));
-  Serial.print(F("  Mode: "));
-  printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_STANDALONE, F("STANDALONE"));
-  printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_MASTER, F("MASTER"));
-  printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_SLAVE_IN_PHASE, F("SLAVE_IN_PHASE"));
-  printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_SLAVE_OUT_OF_PHASE, F("SLAVE_OUT_OF_PHASE"));
-  Serial.println();
+  String ret = "Interleave:\nMode: ";
+  ret += printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_STANDALONE, F("STANDALONE"));
+  ret += printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_MASTER, F("MASTER"));
+  ret += printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_SLAVE_IN_PHASE, F("SLAVE_IN_PHASE"));
+  ret += printIfEq(value, 0b1111111111111111 << 0, SIC45X_INTERLEAVE_MODE_SLAVE_OUT_OF_PHASE, F("SLAVE_OUT_OF_PHASE"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setInterleave(uint16_t value) {
@@ -220,25 +211,24 @@ uint8_t SiC45x::getVoutOvFaultResponse() {
   return smbus_.readByte(SIC45X_VOUT_OV_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printVoutOvFaultResponse() {
+String SiC45x::printVoutOvFaultResponse() {
   uint8_t value = getVoutOvFaultResponse();
-  Serial.println(F("VoutOvFaultResponse: "));
-  Serial.print(F("  Ovrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRSP_CONTINUE, F("CONTINUE"));
-  printIfEq(value, 0b11 << 6, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
-  Serial.println();
-  Serial.print(F("  Ovrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_2, F("RETRIES_2"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_4, F("RETRIES_4"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_6, F("RETRIES_6"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Ovdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "VoutOvFaultResponse:\nOvrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRSP_CONTINUE, F("CONTINUE"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
+  ret += "\nOvrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_2, F("RETRIES_2"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_4, F("RETRIES_4"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES_6, F("RETRIES_6"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_OV_FAULT_RESPONSE_OVRTY_RETRIES, F("RETRIES"));
+  ret += "\nOvdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_OV_FAULT_RESPONSE_OVDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setVoutOvFaultResponse(uint8_t value) {
@@ -273,26 +263,25 @@ uint8_t SiC45x::getVoutUvFaultResponse() {
   return smbus_.readByte(SIC45X_VOUT_UV_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printVoutUvFaultResponse() {
+String SiC45x::printVoutUvFaultResponse() {
   uint8_t value = getVoutUvFaultResponse();
-  Serial.println(F("VoutUvFaultResponse: "));
-  Serial.print(F("  Uvrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_CONTINUE, F("CONTINUE"));
-  printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_RETRY, F("RETRY"));
-  printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
-  Serial.println();
-  Serial.print(F("  Uvrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_1, F("RETRIES_1"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_2, F("RETRIES_2"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_6, F("RETRIES_6"));
-  printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Uvdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "VoutUvFaultResponse:\nUvrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_CONTINUE, F("CONTINUE"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_RETRY, F("RETRY"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
+  ret += "\nUvrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_1, F("RETRIES_1"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_2, F("RETRIES_2"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES_6, F("RETRIES_6"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VOUT_UV_FAULT_RESPONSE_UVRTY_RETRIES, F("RETRIES"));
+  ret += "\nUvdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VOUT_UV_FAULT_RESPONSE_UVDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setVoutUvFaultResponse(uint8_t value) {
@@ -311,26 +300,25 @@ uint8_t SiC45x::getIoutOcFaultResponse() {
   return smbus_.readByte(SIC45X_IOUT_OC_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printIoutOcFaultResponse() {
+String SiC45x::printIoutOcFaultResponse() {
   uint8_t value = getIoutOcFaultResponse();
-  Serial.println(F("IoutOcFaultResponse: "));
-  Serial.print(F("  Ocrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_CONTINUE, F("CONTINUE"));
-  printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_RETRY, F("RETRY"));
-  printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
-  Serial.println();
-  Serial.print(F("  Ocrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_2, F("RETRIES_2"));
-  printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_4, F("RETRIES_4"));
-  printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_6, F("RETRIES_6"));
-  printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Ocdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "IoutOcFaultResponse:\nOcrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_CONTINUE, F("CONTINUE"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_RETRY, F("RETRY"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
+  ret += "\nOcrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_2, F("RETRIES_2"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_4, F("RETRIES_4"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES_6, F("RETRIES_6"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_IOUT_OC_FAULT_RESPONSE_OCRTY_RETRIES, F("RETRIES"));
+  ret += "\nOcdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_IOUT_OC_FAULT_RESPONSE_OCDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setIoutOcFaultResponse(uint8_t value) {
@@ -357,27 +345,26 @@ uint8_t SiC45x::getOtFaultResponse() {
   return smbus_.readByte(SIC45X_OT_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printOtFaultResponse() {
+String SiC45x::printOtFaultResponse() {
   uint8_t value = getOtFaultResponse();
-  Serial.println(F("OtFaultResponse: "));
-  Serial.print(F("  Otrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_CONTINUE, F("CONTINUE"));
-  printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_RETRY, F("RETRY"));
-  printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
-  Serial.println();
-  Serial.print(F("  Otrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_2, F("RETRIES_2"));
-  printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_4, F("RETRIES_4"));
-  printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_6, F("RETRIES_6"));
-  printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Otdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_1, F("DELAY_1"));
-  printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "OtFaultResponse:\nOtrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_CONTINUE, F("CONTINUE"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_RETRY, F("RETRY"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_OT_FAULT_RESPONSE_OTRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
+  ret += "\nOtrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_2, F("RETRIES_2"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_4, F("RETRIES_4"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES_6, F("RETRIES_6"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_OT_FAULT_RESPONSE_OTRTY_RETRIES, F("RETRIES"));
+  ret += "\nOtdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_1, F("DELAY_1"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_OT_FAULT_RESPONSE_OTDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setOtFaultResponse(uint8_t value) {
@@ -404,25 +391,24 @@ uint8_t SiC45x::getVinOvFaultResponse() {
   return smbus_.readByte(SIC45X_VIN_OV_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printVinOvFaultResponse() {
+String SiC45x::printVinOvFaultResponse() {
   uint8_t value = getVinOvFaultResponse();
-  Serial.println(F("VinOvFaultResponse: "));
-  Serial.print(F("  Ovrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_VIN_OV_FAULT_RESPONSE_OVRSP_CONTINUE, F("CONTINUE"));
-  printIfEq(value, 0b11 << 6, SIC45X_VIN_OV_FAULT_RESPONSE_OVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
-  Serial.println();
-  Serial.print(F("  Ovrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_2, F("RETRIES_2"));
-  printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_4, F("RETRIES_4"));
-  printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_6, F("RETRIES_6"));
-  printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Ovdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "VinOvFaultResponse:\nOvrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VIN_OV_FAULT_RESPONSE_OVRSP_CONTINUE, F("CONTINUE"));
+  ret += printIfEq(value, 0b11 << 6, SIC45X_VIN_OV_FAULT_RESPONSE_OVRSP_DISABLED_WHILE_FAULTY, F("DISABLED_WHILE_FAULTY"));
+  ret += "\nOvrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_2, F("RETRIES_2"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_4, F("RETRIES_4"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES_6, F("RETRIES_6"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_VIN_OV_FAULT_RESPONSE_OVRTY_RETRIES, F("RETRIES"));
+  ret += "\nOvdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_VIN_OV_FAULT_RESPONSE_OVDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setVinOvFaultResponse(uint8_t value) {
@@ -489,24 +475,23 @@ uint8_t SiC45x::getTonMaxFaultResponse() {
   return smbus_.readByte(SIC45X_TON_MAX_FAULT_RESPONSE_CMD);
 }
 
-void SiC45x::printTonMaxFaultResponse() {
+String SiC45x::printTonMaxFaultResponse() {
   uint8_t value = getTonMaxFaultResponse();
-  Serial.println(F("TonMaxFaultResponse: "));
-  Serial.print(F("  Onmxrsp: "));
-  printIfEq(value, 0b11 << 6, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRSP_RETRY, F("RETRY"));
-  Serial.println();
-  Serial.print(F("  Onmxrty: "));
-  printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_NO_RESTART, F("NO_RESTART"));
-  printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_RETRIES_1, F("RETRIES_1"));
-  printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_RETRIES, F("RETRIES"));
-  Serial.println();
-  Serial.print(F("  Onmxdly: "));
-  printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_NO_DELAY, F("NO_DELAY"));
-  printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_1, F("DELAY_1"));
-  printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_2, F("DELAY_2"));
-  printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_3, F("DELAY_3"));
-  printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_6, F("DELAY_6"));
-  Serial.println();
+  String ret = "TonMaxFaultResponse:\nOnmxrsp: ";
+  ret += printIfEq(value, 0b11 << 6, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRSP_RETRY, F("RETRY"));
+  ret += "\nOnmxrty: ";
+  ret += printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_NO_RESTART, F("NO_RESTART"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_RETRIES_1, F("RETRIES_1"));
+  ret += printIfEq(value, 0b111 << 3, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXRTY_RETRIES, F("RETRIES"));
+  ret += "\nOnmxdly: ";
+  ret += printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_NO_DELAY, F("NO_DELAY"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_1, F("DELAY_1"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_2, F("DELAY_2"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_3, F("DELAY_3"));
+  ret += printIfEq(value, 0b111 << 0, SIC45X_TON_MAX_FAULT_RESPONSE_ONMXDLY_DELAY_6, F("DELAY_6"));
+  ret += "\n";
+
+  return ret;
 }
 
 void SiC45x::setTonMaxFaultResponse(uint8_t value) {
@@ -541,252 +526,223 @@ uint8_t SiC45x::getStatusByte() {
   return smbus_.readByte(SIC45X_STATUS_BYTE_CMD);
 }
 
-void SiC45x::printStatusByte() {
+String SiC45x::printStatusByte() {
   uint8_t value = getStatusByte();
-  Serial.println(F("StatusByte: "));
-  Serial.print(F("  Busy: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_BYTE_BUSY_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_BYTE_BUSY_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Off: "));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_BYTE_OFF_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_BYTE_OFF_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VoutOvFault: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_BYTE_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_BYTE_VOUT_OV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  IoutUvFault: "));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_BYTE_IOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_BYTE_IOUT_UV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VinUvFault: "));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_BYTE_VIN_UV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_BYTE_VIN_UV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Temperature: "));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_BYTE_TEMPERATURE_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_BYTE_TEMPERATURE_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Cml: "));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_BYTE_CML_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_BYTE_CML_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Other: "));
-  printIfEq(value, 0b1 << 0, SIC45X_STATUS_BYTE_OTHER_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 0, SIC45X_STATUS_BYTE_OTHER_FAULT, F("FAULT"));
-  Serial.println();
+  String ret = "StatusByte:\nBusy: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_BYTE_BUSY_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_BYTE_BUSY_FAULT, F("FAULT"));
+  ret += "\nOff: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_BYTE_OFF_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_BYTE_OFF_FAULT, F("FAULT"));
+  ret += "\nVoutOvFault: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_BYTE_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_BYTE_VOUT_OV_FAULT_FAULT, F("FAULT"));
+  ret += "\nIoutUvFault: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_BYTE_IOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_BYTE_IOUT_UV_FAULT_FAULT, F("FAULT"));
+  ret += "\nVinUvFault: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_BYTE_VIN_UV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_BYTE_VIN_UV_FAULT_FAULT, F("FAULT"));
+  ret += "\nTemperature: ";
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_BYTE_TEMPERATURE_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_BYTE_TEMPERATURE_FAULT, F("FAULT"));
+  ret += "\nCml: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_BYTE_CML_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_BYTE_CML_FAULT, F("FAULT"));
+  ret += "\nOther: ";
+  ret += printIfEq(value, 0b1 << 0, SIC45X_STATUS_BYTE_OTHER_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 0, SIC45X_STATUS_BYTE_OTHER_FAULT, F("FAULT"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint16_t SiC45x::getStatusWord() {
   return smbus_.readWord(SIC45X_STATUS_WORD_CMD);
 }
 
-void SiC45x::printStatusWord() {
+String SiC45x::printStatusWord() {
   uint16_t value = getStatusWord();
-  Serial.println(F("StatusWord: "));
-  Serial.print(F("  Busy: "));
-  printIfEq(value, 0b1 << 15, SIC45X_STATUS_WORD_BUSY_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 15, SIC45X_STATUS_WORD_BUSY_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Off: "));
-  printIfEq(value, 0b1 << 14, SIC45X_STATUS_WORD_OFF_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 14, SIC45X_STATUS_WORD_OFF_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VoutOvFault: "));
-  printIfEq(value, 0b1 << 13, SIC45X_STATUS_WORD_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 13, SIC45X_STATUS_WORD_VOUT_OV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  IoutUvFault: "));
-  printIfEq(value, 0b1 << 12, SIC45X_STATUS_WORD_IOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 12, SIC45X_STATUS_WORD_IOUT_UV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VinUvFault: "));
-  printIfEq(value, 0b1 << 11, SIC45X_STATUS_WORD_VIN_UV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 11, SIC45X_STATUS_WORD_VIN_UV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Temperature: "));
-  printIfEq(value, 0b1 << 10, SIC45X_STATUS_WORD_TEMPERATURE_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 10, SIC45X_STATUS_WORD_TEMPERATURE_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Cml: "));
-  printIfEq(value, 0b1 << 9, SIC45X_STATUS_WORD_CML_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 9, SIC45X_STATUS_WORD_CML_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Other: "));
-  printIfEq(value, 0b1 << 8, SIC45X_STATUS_WORD_OTHER_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 8, SIC45X_STATUS_WORD_OTHER_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Vout: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_WORD_VOUT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_WORD_VOUT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  IoutPout: "));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_WORD_IOUT_POUT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_WORD_IOUT_POUT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Input: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_WORD_INPUT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_WORD_INPUT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Mfr: "));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_WORD_MFR_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_WORD_MFR_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  PowerGood: "));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_WORD_POWER_GOOD_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_WORD_POWER_GOOD_FAULT, F("FAULT"));
-  Serial.println();
+  String ret = "StatusWord:\nBusy: ";
+  ret += printIfEq(value, 0b1 << 15, SIC45X_STATUS_WORD_BUSY_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 15, SIC45X_STATUS_WORD_BUSY_FAULT, F("FAULT"));
+  ret += "\nOff: ";
+  ret += printIfEq(value, 0b1 << 14, SIC45X_STATUS_WORD_OFF_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 14, SIC45X_STATUS_WORD_OFF_FAULT, F("FAULT"));
+  ret += "\nVoutOvFault: ";
+  ret += printIfEq(value, 0b1 << 13, SIC45X_STATUS_WORD_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 13, SIC45X_STATUS_WORD_VOUT_OV_FAULT_FAULT, F("FAULT"));
+  ret += "\nIoutUvFault: ";
+  ret += printIfEq(value, 0b1 << 12, SIC45X_STATUS_WORD_IOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 12, SIC45X_STATUS_WORD_IOUT_UV_FAULT_FAULT, F("FAULT"));
+  ret += "\nVinUvFault: ";
+  ret += printIfEq(value, 0b1 << 11, SIC45X_STATUS_WORD_VIN_UV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 11, SIC45X_STATUS_WORD_VIN_UV_FAULT_FAULT, F("FAULT"));
+  ret += "\nTemperature: ";
+  ret += printIfEq(value, 0b1 << 10, SIC45X_STATUS_WORD_TEMPERATURE_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 10, SIC45X_STATUS_WORD_TEMPERATURE_FAULT, F("FAULT"));
+  ret += "\nCml: ";
+  ret += printIfEq(value, 0b1 << 9, SIC45X_STATUS_WORD_CML_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 9, SIC45X_STATUS_WORD_CML_FAULT, F("FAULT"));
+  ret += "\nOther: ";
+  ret += printIfEq(value, 0b1 << 8, SIC45X_STATUS_WORD_OTHER_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 8, SIC45X_STATUS_WORD_OTHER_FAULT, F("FAULT"));
+  ret += "\nVout: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_WORD_VOUT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_WORD_VOUT_FAULT, F("FAULT"));
+  ret += "\nIoutPout: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_WORD_IOUT_POUT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_WORD_IOUT_POUT_FAULT, F("FAULT"));
+  ret += "\nInput: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_WORD_INPUT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_WORD_INPUT_FAULT, F("FAULT"));
+  ret += "\nMfr: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_WORD_MFR_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_WORD_MFR_FAULT, F("FAULT"));
+  ret += "\nPowerGood: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_WORD_POWER_GOOD_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_WORD_POWER_GOOD_FAULT, F("FAULT"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusVout() {
   return smbus_.readByte(SIC45X_STATUS_VOUT_CMD);
 }
 
-void SiC45x::printStatusVout() {
+String SiC45x::printStatusVout() {
   uint8_t value = getStatusVout();
-  Serial.println(F("StatusVout: "));
-  Serial.print(F("  VoutOvFault: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_VOUT_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_VOUT_VOUT_OV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VoutOvWarning: "));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_VOUT_VOUT_OV_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_VOUT_VOUT_OV_WARNING_WARNING, F("WARNING"));
-  Serial.println();
-  Serial.print(F("  VoutUvWarning: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_VOUT_VOUT_UV_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_VOUT_VOUT_UV_WARNING_WARNING, F("WARNING"));
-  Serial.println();
-  Serial.print(F("  VoutUvFault: "));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_VOUT_VOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_VOUT_VOUT_UV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VoutMaxMin: "));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_VOUT_VOUT_MAX_MIN_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_VOUT_VOUT_MAX_MIN_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  TonMaxFault: "));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_VOUT_TON_MAX_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_VOUT_TON_MAX_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  ToffMaxWarning: "));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_VOUT_TOFF_MAX_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_VOUT_TOFF_MAX_WARNING_WARNING, F("WARNING"));
-  Serial.println();
+  String ret = "StatusVout:\nVoutOvFault: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_VOUT_VOUT_OV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_VOUT_VOUT_OV_FAULT_FAULT, F("FAULT"));
+  ret += "\nVoutOvWarning: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_VOUT_VOUT_OV_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_VOUT_VOUT_OV_WARNING_WARNING, F("WARNING"));
+  ret += "\nVoutUvWarning: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_VOUT_VOUT_UV_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_VOUT_VOUT_UV_WARNING_WARNING, F("WARNING"));
+  ret += "\nVoutUvFault: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_VOUT_VOUT_UV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_VOUT_VOUT_UV_FAULT_FAULT, F("FAULT"));
+  ret += "\nVoutMaxMin: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_VOUT_VOUT_MAX_MIN_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_VOUT_VOUT_MAX_MIN_FAULT, F("FAULT"));
+  ret += "\nTonMaxFault: ";
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_VOUT_TON_MAX_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_VOUT_TON_MAX_FAULT_FAULT, F("FAULT"));
+  ret += "\nToffMaxWarning: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_VOUT_TOFF_MAX_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_VOUT_TOFF_MAX_WARNING_WARNING, F("WARNING"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusIout() {
   return smbus_.readByte(SIC45X_STATUS_IOUT_CMD);
 }
 
-void SiC45x::printStatusIout() {
+String SiC45x::printStatusIout() {
   uint8_t value = getStatusIout();
-  Serial.println(F("StatusIout: "));
-  Serial.print(F("  IoutOcFault: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_IOUT_IOUT_OC_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_IOUT_IOUT_OC_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  IoutOcWarning: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_IOUT_IOUT_OC_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_IOUT_IOUT_OC_WARNING_WARNING, F("WARNING"));
-  Serial.println();
+  String ret = "StatusIout:\nIoutOcFault: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_IOUT_IOUT_OC_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_IOUT_IOUT_OC_FAULT_FAULT, F("FAULT"));
+  ret += "\nIoutOcWarning: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_IOUT_IOUT_OC_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_IOUT_IOUT_OC_WARNING_WARNING, F("WARNING"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusInput() {
   return smbus_.readByte(SIC45X_STATUS_INPUT_CMD);
 }
 
-void SiC45x::printStatusInput() {
+String SiC45x::printStatusInput() {
   uint8_t value = getStatusInput();
-  Serial.println(F("StatusInput: "));
-  Serial.print(F("  VinOvFault: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_INPUT_VIN_OV_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_INPUT_VIN_OV_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  VinUvWarning: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_INPUT_VIN_UV_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_INPUT_VIN_UV_WARNING_WARNING, F("WARNING"));
-  Serial.println();
-  Serial.print(F("  VinOff: "));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_INPUT_VIN_OFF_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_INPUT_VIN_OFF_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  IinOcWarning: "));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_INPUT_IIN_OC_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_INPUT_IIN_OC_WARNING_WARNING, F("WARNING"));
-  Serial.println();
+  String ret = "StatusInput:\nVinOvFault: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_INPUT_VIN_OV_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_INPUT_VIN_OV_FAULT_FAULT, F("FAULT"));
+  ret += "\nVinUvWarning: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_INPUT_VIN_UV_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_INPUT_VIN_UV_WARNING_WARNING, F("WARNING"));
+  ret += "\nVinOff: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_INPUT_VIN_OFF_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_INPUT_VIN_OFF_FAULT, F("FAULT"));
+  ret += "\nIinOcWarning: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_INPUT_IIN_OC_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_INPUT_IIN_OC_WARNING_WARNING, F("WARNING"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusTemperature() {
   return smbus_.readByte(SIC45X_STATUS_TEMPERATURE_CMD);
 }
 
-void SiC45x::printStatusTemperature() {
+String SiC45x::printStatusTemperature() {
   uint8_t value = getStatusTemperature();
-  Serial.println(F("StatusTemperature: "));
-  Serial.print(F("  OtFault: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_TEMPERATURE_OT_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_TEMPERATURE_OT_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  OtWarning: "));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_TEMPERATURE_OT_WARNING_NO_WARNING, F("NO_WARNING"));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_TEMPERATURE_OT_WARNING_WARNING, F("WARNING"));
-  Serial.println();
+  String ret = "StatusTemperature:\nOtFault: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_TEMPERATURE_OT_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_TEMPERATURE_OT_FAULT_FAULT, F("FAULT"));
+  ret += "\nOtWarning: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_TEMPERATURE_OT_WARNING_NO_WARNING, F("NO_WARNING"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_TEMPERATURE_OT_WARNING_WARNING, F("WARNING"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusCml() {
   return smbus_.readByte(SIC45X_STATUS_CML_CMD);
 }
 
-void SiC45x::printStatusCml() {
+String SiC45x::printStatusCml() {
   uint8_t value = getStatusCml();
-  Serial.println(F("StatusCml: "));
-  Serial.print(F("  InvalidCommand: "));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_CML_INVALID_COMMAND_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 7, SIC45X_STATUS_CML_INVALID_COMMAND_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  InvalidData: "));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_CML_INVALID_DATA_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 6, SIC45X_STATUS_CML_INVALID_DATA_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  PecFailed: "));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_CML_PEC_FAILED_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 5, SIC45X_STATUS_CML_PEC_FAILED_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  MemoryFault: "));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_CML_MEMORY_FAULT_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 4, SIC45X_STATUS_CML_MEMORY_FAULT_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  Other: "));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_CML_OTHER_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_CML_OTHER_FAULT, F("FAULT"));
-  Serial.println();
+  String ret = "StatusCml:\nInvalidCommand: ";
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_CML_INVALID_COMMAND_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 7, SIC45X_STATUS_CML_INVALID_COMMAND_FAULT, F("FAULT"));
+  ret += "\nInvalidData: ";
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_CML_INVALID_DATA_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 6, SIC45X_STATUS_CML_INVALID_DATA_FAULT, F("FAULT"));
+  ret += "\nPecFailed: ";
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_CML_PEC_FAILED_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 5, SIC45X_STATUS_CML_PEC_FAILED_FAULT, F("FAULT"));
+  ret += "\nMemoryFault: ";
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_CML_MEMORY_FAULT_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 4, SIC45X_STATUS_CML_MEMORY_FAULT_FAULT, F("FAULT"));
+  ret += "\nOther: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_CML_OTHER_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_CML_OTHER_FAULT, F("FAULT"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint8_t SiC45x::getStatusMfrSpecific() {
   return smbus_.readByte(SIC45X_STATUS_MFR_SPECIFIC_CMD);
 }
 
-void SiC45x::printStatusMfrSpecific() {
+String SiC45x::printStatusMfrSpecific() {
   uint8_t value = getStatusMfrSpecific();
-  Serial.println(F("StatusMfrSpecific: "));
-  Serial.print(F("  IlMaster: "));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_MFR_SPECIFIC_IL_MASTER_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 3, SIC45X_STATUS_MFR_SPECIFIC_IL_MASTER_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  YfVerify: "));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_MFR_SPECIFIC_YF_VERIFY_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 2, SIC45X_STATUS_MFR_SPECIFIC_YF_VERIFY_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  YfErase: "));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_MFR_SPECIFIC_YF_ERASE_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 1, SIC45X_STATUS_MFR_SPECIFIC_YF_ERASE_FAULT, F("FAULT"));
-  Serial.println();
-  Serial.print(F("  YfPgm: "));
-  printIfEq(value, 0b1 << 0, SIC45X_STATUS_MFR_SPECIFIC_YF_PGM_NO_FAULT, F("NO_FAULT"));
-  printIfEq(value, 0b1 << 0, SIC45X_STATUS_MFR_SPECIFIC_YF_PGM_FAULT, F("FAULT"));
-  Serial.println();
+  String ret = "StatusMfrSpecific:\nIlMaster: ";
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_MFR_SPECIFIC_IL_MASTER_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 3, SIC45X_STATUS_MFR_SPECIFIC_IL_MASTER_FAULT, F("FAULT"));
+  ret += "\nYfVerify: ";
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_MFR_SPECIFIC_YF_VERIFY_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 2, SIC45X_STATUS_MFR_SPECIFIC_YF_VERIFY_FAULT, F("FAULT"));
+  ret += "\nYfErase: ";
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_MFR_SPECIFIC_YF_ERASE_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 1, SIC45X_STATUS_MFR_SPECIFIC_YF_ERASE_FAULT, F("FAULT"));
+  ret += "\nYfPgm: ";
+  ret += printIfEq(value, 0b1 << 0, SIC45X_STATUS_MFR_SPECIFIC_YF_PGM_NO_FAULT, F("NO_FAULT"));
+  ret += printIfEq(value, 0b1 << 0, SIC45X_STATUS_MFR_SPECIFIC_YF_PGM_FAULT, F("FAULT"));
+  ret += "\n";
+
+  return ret;
 }
 
 float SiC45x::getReadVin() {
@@ -825,21 +781,21 @@ uint8_t SiC45x::getPmbusRevision() {
   return smbus_.readByte(SIC45X_PMBUS_REVISION_CMD);
 }
 
-void SiC45x::printPmbusRevision() {
+String SiC45x::printPmbusRevision() {
   uint8_t value = getPmbusRevision();
-  Serial.println(F("PmbusRevision: "));
-  Serial.print(F("  Part1: "));
-  printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_0, F("REVISION_1_0"));
-  printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_1, F("REVISION_1_1"));
-  printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_2, F("REVISION_1_2"));
-  printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_3, F("REVISION_1_3"));
-  Serial.println();
-  Serial.print(F("  Part2: "));
-  printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_0, F("REVISION_1_0"));
-  printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_1, F("REVISION_1_1"));
-  printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_2, F("REVISION_1_2"));
-  printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_3, F("REVISION_1_3"));
-  Serial.println();
+  String ret = "PmbusRevision:\nPart1: ";
+  ret += printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_0, F("REVISION_1_0"));
+  ret += printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_1, F("REVISION_1_1"));
+  ret += printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_2, F("REVISION_1_2"));
+  ret += printIfEq(value, 0b1111 << 4, SIC45X_PMBUS_REVISION_PART_1_REVISION_1_3, F("REVISION_1_3"));
+  ret += "\nPart2: ";
+  ret += printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_0, F("REVISION_1_0"));
+  ret += printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_1, F("REVISION_1_1"));
+  ret += printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_2, F("REVISION_1_2"));
+  ret += printIfEq(value, 0b1111 << 0, SIC45X_PMBUS_REVISION_PART_2_REVISION_1_3, F("REVISION_1_3"));
+  ret += "\n";
+
+  return ret;
 }
 
 uint16_t SiC45x::getMfrSerial() {
@@ -866,8 +822,10 @@ uint16_t SiC45x::floatToL16(float inputVal) {
   return smbus_.floatToL16(0x17, inputVal);
 }
 
-void SiC45x::printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str) {
-  //if ((value & mask) == flag) {
-  //  ESP_LOGD(TAG, "%s", str);
-  //}
+String SiC45x::printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str) {
+  if ((value & mask) == flag) {
+    return str;
+  } else {
+    return "";
+  }
 }

@@ -481,13 +481,13 @@ class SiC45x {
 
   // The OPERATION command sets the operational state of the regulator.
   uint8_t getOperation();
-  void printOperation();
+  String printOperation();
   void setOperation(uint8_t value);
   // The ON_OFF_CONFIG command configures the combination of EN pin input and
   // PMBus commands needed to turn the unit on and off. This includes how the unit
   // responds when power is applied.
   uint8_t getOnOffConfiguration();
-  void printOnOffConfiguration();
+  String printOnOffConfiguration();
   void setOnOffConfiguration(uint8_t value);
   // The CLEAR_FAULTS command is used to clear any fault bits that have been set
   void sendClearFaults();
@@ -504,7 +504,7 @@ class SiC45x {
   // The CAPABILITY command provides a way for a host system to determine some key
   // capabilities of the PMBus device.
   uint8_t getCapability();
-  void printCapability();
+  String printCapability();
   // The PMBus specification dictates that the data word for the V OUT_MODE
   // command is one byte that consists of a 3-bit mode and 5-bit exponent
   // parameter, as shown below. The 3-bit mode sets whether the device uses the
@@ -556,14 +556,14 @@ class SiC45x {
   // phase, at which the PMBus unit, once operation has started, should use to
   // generate switching frequency and phase angle
   uint16_t getInterleave();
-  void printInterleave();
+  String printInterleave();
   void setInterleave(uint16_t value);
   // The VOUT_OV_FAULT_LIMIT command sets the value of the output voltage measured
   // at the sense of output pins that causes an output overvoltage fault
   float getVoutOvFaultLimit();
   void setVoutOvFaultLimit(float value);
   uint8_t getVoutOvFaultResponse();
-  void printVoutOvFaultResponse();
+  String printVoutOvFaultResponse();
   void setVoutOvFaultResponse(uint8_t value);
   // The VOUT_OV_WARN_LIMIT command sets the value of the output voltage measured
   // at the sense of output pins that causes an output voltage high warning
@@ -580,7 +580,7 @@ class SiC45x {
   // The VOUT_UV_FAULT_RESPONSE command instructs the device on what action to
   // take in response to an output undervoltage fault
   uint8_t getVoutUvFaultResponse();
-  void printVoutUvFaultResponse();
+  String printVoutUvFaultResponse();
   void setVoutUvFaultResponse(uint8_t value);
   // The IOUT_OC_FAULT_LIMIT command sets the value of the output current, in
   // Amperes, that causes the overcurrent detector to indicate an overcurrent
@@ -591,7 +591,7 @@ class SiC45x {
   // response (OCP) when valley inductor current is higher than
   // IOUT_OC_FAULT_LIMIT
   uint8_t getIoutOcFaultResponse();
-  void printIoutOcFaultResponse();
+  String printIoutOcFaultResponse();
   void setIoutOcFaultResponse(uint8_t value);
   // The IOUT_OC_WARN_LIMIT command sets the value of the output current, in
   // ampere, that causes an output overcurrent warning. This is a read and write
@@ -606,7 +606,7 @@ class SiC45x {
   // The OT_FAULT_RESPONSE command instructs the device on what action to take in
   // response to an overtemperature fault
   uint8_t getOtFaultResponse();
-  void printOtFaultResponse();
+  String printOtFaultResponse();
   void setOtFaultResponse(uint8_t value);
   // The OT_WARN_LIMIT command sets the temperature of the unit, in degree
   // celsius, at which it should indicate an overtemperature warning alarm
@@ -619,7 +619,7 @@ class SiC45x {
   // The VIN_OV_FAULT_RESPONSE command instructs the device on what action to take
   // in response to an input overvoltage fault
   uint8_t getVinOvFaultResponse();
-  void printVinOvFaultResponse();
+  String printVinOvFaultResponse();
   void setVinOvFaultResponse(uint8_t value);
   // The VIN_UV_WARN_LIMIT command sets the value of the input voltage, in volt,
   // that causes an input voltage low warning
@@ -656,7 +656,7 @@ class SiC45x {
   // The TON_MAX_FAULT_RESPONSE command instructs the device on what action to
   // take in response to an input overcurrent fault
   uint8_t getTonMaxFaultResponse();
-  void printTonMaxFaultResponse();
+  String printTonMaxFaultResponse();
   void setTonMaxFaultResponse(uint8_t value);
   // The TOFF_DELAY command sets the time, in millisecond, from when a stop
   // condition is received until the unit stops transferring energy to the output.
@@ -676,24 +676,24 @@ class SiC45x {
   // The STATUS_BYTE command returns one byte of information with a summary of the
   // most critical faults. 
   uint8_t getStatusByte();
-  void printStatusByte();
+  String printStatusByte();
   // The STATUS_WORD command returns two bytes of information with a summary of
   // the unit’s fault condition. Based on the information in these bytes, the host
   // can get more information by reading the appropriate status registers.
   uint16_t getStatusWord();
-  void printStatusWord();
+  String printStatusWord();
   uint8_t getStatusVout();
-  void printStatusVout();
+  String printStatusVout();
   uint8_t getStatusIout();
-  void printStatusIout();
+  String printStatusIout();
   uint8_t getStatusInput();
-  void printStatusInput();
+  String printStatusInput();
   uint8_t getStatusTemperature();
-  void printStatusTemperature();
+  String printStatusTemperature();
   uint8_t getStatusCml();
-  void printStatusCml();
+  String printStatusCml();
   uint8_t getStatusMfrSpecific();
-  void printStatusMfrSpecific();
+  String printStatusMfrSpecific();
   // The READ_VIN command returns the input voltage in volt.
   float getReadVin();
   // The READ_IIN command returns the input current in ampere
@@ -715,7 +715,7 @@ class SiC45x {
   // The PMBUS_REVISION command stores or reads the revision of the PMBus to which
   // the device is compliant.
   uint8_t getPmbusRevision();
-  void printPmbusRevision();
+  String printPmbusRevision();
   // The MFR_SERIAL command is used to store user’s customized information.
   uint16_t getMfrSerial();
   void setMfrSerial(uint16_t value);
@@ -727,7 +727,7 @@ class SiC45x {
   uint16_t getIcDeviceId();
   void setIcDeviceId(uint16_t value);
 
-  void printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str);
+  String printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str);
 };
 
 #endif
