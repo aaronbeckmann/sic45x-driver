@@ -475,9 +475,6 @@ class SiC45x {
   uint16_t floatToL16(float inputVal);
 
  public:
-  SiC45x();
-  void setupBus(uint8_t i2cAdress, TwoWire& wire);
-
   SiC45x(uint8_t i2cAddress);
   SiC45x(uint8_t i2cAddress, TwoWire& wire);
   bool begin();
