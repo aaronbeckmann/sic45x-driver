@@ -8,6 +8,9 @@ class Smbus {
   Smbus(uint8_t address);
   Smbus(uint8_t address, TwoWire& wire);
 
+  void setWire(TwoWire& wire);
+  void setAddress(uint8_t address);
+
   bool begin();
 
   bool sendByte(uint8_t command);
