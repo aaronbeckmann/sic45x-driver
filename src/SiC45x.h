@@ -727,11 +727,7 @@ class SiC45x {
   uint16_t getIcDeviceId();
   void setIcDeviceId(uint16_t value);
 
-  inline void printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str) {
-    if ((value & mask) == flag) {
-      Serial.print(str);
-    }
-  }
+  void printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str);
 };
 
 #endif

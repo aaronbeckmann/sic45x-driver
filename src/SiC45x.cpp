@@ -3,7 +3,8 @@
 // regenerate this file.
 
 #include <Arduino.h>
-  
+
+#include "esphome/core/log.h"  
 #include "SiC45x.h"
 
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
@@ -863,4 +864,10 @@ float SiC45x::l16ToFloat(uint16_t inputVal) {
 
 uint16_t SiC45x::floatToL16(float inputVal) {
   return smbus_.floatToL16(0x17, inputVal);
+}
+
+void SiC45x::printIfEq(uint16_t value, uint16_t mask, uint16_t flag, const __FlashStringHelper *str) {
+  if ((value & mask) == flag) {
+    ESP_LOGD(TAG, "%s", str);
+  }
 }
