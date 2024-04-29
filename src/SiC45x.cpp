@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include "SiC45x.h"
 
-SiC45x::SiC45x() : smbus_(0, TwoWire(0)) {}
+SiC45x::SiC45x() : smbus_(0, Wire) {}
 
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
 
