@@ -475,8 +475,11 @@ class SiC45x {
   uint16_t floatToL16(float inputVal);
 
  public:
+  SiC45x();
   SiC45x(uint8_t i2cAddress);
   SiC45x(uint8_t i2cAddress, TwoWire& wire);
+
+  bool begin(uint8_t i2cAddress, TwoWire& wire);
   bool begin();
 
   // The OPERATION command sets the operational state of the regulator.

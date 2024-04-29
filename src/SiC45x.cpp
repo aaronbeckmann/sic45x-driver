@@ -5,10 +5,16 @@
 #include <Arduino.h>
 #include "SiC45x.h"
 
+SiC45x::SiC45x() : i2cAddress_(0), wire_(nullptr) {}
+
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
 
 SiC45x::SiC45x(uint8_t i2cAddress, TwoWire& wire) : smbus_(i2cAddress, wire) {}
 
+bool SiC45x::begin(uint8_t i2cAddress, TwoWire& wire){
+  smbus_(i2cAddress, wire);
+  return smbus_.begin();
+}
 bool SiC45x::begin() { return smbus_.begin(); }
 
 uint8_t SiC45x::getOperation() {
