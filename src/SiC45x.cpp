@@ -3,16 +3,13 @@
 // regenerate this file.
 
 #include <Arduino.h>
-#include <memory.h>
 #include "SiC45x.h"
 
-SiC45x::SiC45x(){}
+SiC45x::SiC45x() : smbus_(0, TwoWire()) {}
 
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
 
-SiC45x::SiC45x(uint8_t i2cAddress, TwoWire& wire){
-  smbus_ = std::make_unique<Smbus>(i2cAddress, wire);
-}
+SiC45x::SiC45x(uint8_t i2cAddress, TwoWire& wire){} : smbus_(i2cAddress, wire) {}
 
 bool SiC45x::begin(uint8_t i2cAddress, TwoWire& wire){
   smbus_(i2cAddress, wire);

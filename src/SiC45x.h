@@ -470,7 +470,7 @@
 #define SIC45X_VOUT_SCALE_LOOP_5V0_12V0 0.125
 
 class SiC45x {
-  std::unique_ptr<Smbus> smbus_; 
+  Smbus smbus_;
   float l16ToFloat(uint16_t inputVal);
   uint16_t floatToL16(float inputVal);
 
