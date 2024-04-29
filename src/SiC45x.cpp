@@ -9,7 +9,7 @@ SiC45x::SiC45x() : smbus_(0, Wire) {}
 
 SiC45x::SiC45x(uint8_t i2cAddress) : SiC45x(i2cAddress, Wire) {}
 
-SiC45x::SiC45x(uint8_t i2cAddress, TwoWire& wire){} : smbus_(i2cAddress, wire) {}
+SiC45x::SiC45x(uint8_t i2cAddress, TwoWire& wire) : smbus_(i2cAddress, wire) {}
 
 bool SiC45x::begin(uint8_t i2cAddress, TwoWire& wire){
   smbus_(i2cAddress, wire);
