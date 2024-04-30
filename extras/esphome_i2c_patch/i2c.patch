@@ -1,0 +1,32 @@
+From efe5bacbf1628fc55458901e30401dbd82e104d7 Mon Sep 17 00:00:00 2001
+From: Aaron Beckmann <aaron.beckmann26@gmail.com>
+Date: Tue, 30 Apr 2024 08:50:58 +0200
+Subject: [PATCH] made wire accessible
+
+---
+ esphome/components/i2c/i2c_bus_arduino.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/esphome/components/i2c/i2c_bus_arduino.h b/esphome/components/i2c/i2c_bus_arduino.h
+index 6a670a2a..1960410e 100644
+--- a/esphome/components/i2c/i2c_bus_arduino.h
++++ b/esphome/components/i2c/i2c_bus_arduino.h
+@@ -28,6 +28,7 @@ class ArduinoI2CBus : public I2CBus, public Component {
+   void set_scl_pin(uint8_t scl_pin) { scl_pin_ = scl_pin; }
+   void set_frequency(uint32_t frequency) { frequency_ = frequency; }
+   void set_timeout(uint32_t timeout) { timeout_ = timeout; }
++  TwoWire *wire_;
+ 
+  private:
+   void recover_();
+@@ -35,7 +36,6 @@ class ArduinoI2CBus : public I2CBus, public Component {
+   RecoveryCode recovery_result_;
+ 
+  protected:
+-  TwoWire *wire_;
+   uint8_t sda_pin_;
+   uint8_t scl_pin_;
+   uint32_t frequency_;
+-- 
+2.42.0.windows.1
+
